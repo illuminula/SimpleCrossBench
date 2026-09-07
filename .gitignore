@@ -1,5 +1,5 @@
 /_dev/**
 /.zig-cache/**
 /bin/**
+
 /*.bat
-/*.zip
