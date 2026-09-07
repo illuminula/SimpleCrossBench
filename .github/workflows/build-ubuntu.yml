@@ -1,0 +1,54 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Generate Version & Notes
+        id: generate
+        shell: pwsh
+        run: |
+          ./.github/workflows/gen-version.ps1
+          ./.github/workflows/gen-notes.ps1
+
+      - name: Setup Zig
+        uses: https://codeberg.org/mlugg/setup-zig@v2
+        with:
+          version: 0.16.0
+
+      - name: Zig Build
+        run: zig build
+
+      - name: Pack Bin
+        run: |
+          tar -czf ${{ steps.generate.outputs.bin_ver }}.tar.gz ./bin/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.generate.outputs.release_ver }}
+          name: ${{ steps.generate.outputs.release_ver }}
+          body_path: CHANGELOG.md
+          files: |
+            *.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
