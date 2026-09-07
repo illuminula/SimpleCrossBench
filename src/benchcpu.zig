@@ -4,10 +4,12 @@ const QuickBench = @import("./shared/QuickBench.zig");
 const method = @import("./benchcpu/method.zig");
 
 pub fn main() !void {
+    const cpu_count = std.Thread.getCpuCount() catch 1;
+
     qstdio.initGlobal();
     defer qstdio.deinitGlobal();
 
-    var qb = QuickBench.init(2500, 14);
+    var qb = QuickBench.init(cpu_count, 2500, 14);
     defer qb.deinit();
 
     const headers_int = [_][]const u8{

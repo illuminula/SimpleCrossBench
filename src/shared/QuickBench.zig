@@ -6,12 +6,14 @@ const allocator = std.heap.smp_allocator;
 
 pub const UserCallback = *const fn (usize) f64;
 
+cpu_count: usize,
 bench_time_ms: u32,
 bench_item_width: u32,
 threaded: std.Io.Threaded,
 
-pub fn init(bench_time_ms: u32, bench_item_width: u32) QuickBench {
+pub fn init(cpu_count: usize, bench_time_ms: u32, bench_item_width: u32) QuickBench {
     return .{
+        .cpu_count = cpu_count,
         .bench_time_ms = bench_time_ms,
         .bench_item_width = bench_item_width,
         .threaded = .init(allocator, .{}),
@@ -88,29 +90,27 @@ pub fn bench(self: *QuickBench, comptime header: []const []const u8, funcs: []co
     try self.printHeader(&[_][]const u8{"CPU"} ++ header);
     try self.printSplit(1 + header.len);
 
-    const cpu_count = try std.Thread.getCpuCount();
     var cpu_indexes_arr = std.ArrayList([]const usize).empty;
     defer cpu_indexes_arr.deinit(allocator);
 
-    var cpu_indexes_allcpu = try allocator.alloc(usize, cpu_count);
-    defer allocator.free(cpu_indexes_allcpu);
-    for (0..cpu_count) |i| cpu_indexes_allcpu[i] = i;
-
     try cpu_indexes_arr.append(allocator, &.{0});
-    try cpu_indexes_arr.append(allocator, &.{cpu_count / 2});
-    try cpu_indexes_arr.append(allocator, &.{cpu_count - 1});
-    try cpu_indexes_arr.append(allocator, &.{ 0, cpu_count / 2, cpu_count - 1 });
+    try cpu_indexes_arr.append(allocator, &.{self.cpu_count / 2});
+    try cpu_indexes_arr.append(allocator, &.{self.cpu_count - 1});
+    var cpu_indexes_allcpu = try allocator.alloc(usize, self.cpu_count);
+    defer allocator.free(cpu_indexes_allcpu);
+    for (0..self.cpu_count) |i|
+        cpu_indexes_allcpu[i] = i;
     try cpu_indexes_arr.append(allocator, cpu_indexes_allcpu);
 
     for (cpu_indexes_arr.items) |cpu_indexes| {
         try qstdio.write("|", .{});
-        if (cpu_indexes.len == cpu_count) {
-            try qstdio.write("0-{d:<3}", .{cpu_count - 1});
-            try qstdio.write("{s:<[1]}", .{ "", @max(0, self.bench_item_width - 5) });
+        if (cpu_indexes.len == self.cpu_count) {
+            try qstdio.write("0-{d:<3}", .{self.cpu_count - 1});
+            try qstdio.write("{s:<[1]}", .{ "", @max(1, self.bench_item_width - 2 - 3) });
         } else {
             for (cpu_indexes) |i|
                 try qstdio.write("{d:<3}", .{i});
-            try qstdio.write("{s:<[1]}", .{ "", @max(0, self.bench_item_width - 3 * cpu_indexes.len) });
+            try qstdio.write("{s:<[1]}", .{ "", @max(1, self.bench_item_width - 3 * cpu_indexes.len) });
         }
 
         for (funcs) |func| {
@@ -136,7 +136,7 @@ pub fn bench(self: *QuickBench, comptime header: []const []const u8, funcs: []co
 fn _test_callback(_: usize) f64 {
     var t = std.Io.Threaded.init_single_threaded;
     const io = t.io();
-    io.sleep(.fromMilliseconds(60), .awake) catch {};
+    io.sleep(.fromMilliseconds(100), .awake) catch {};
     return 1.0;
 }
 
@@ -146,7 +146,7 @@ test "syntax" {
     qstdio.redirectStderr();
     try qstdio.writeLine("", .{});
 
-    var qb = QuickBench.init(100, 13);
+    var qb = QuickBench.init(std.Thread.getCpuCount() catch 1, 100, 13);
     defer qb.deinit();
 
     const headers = [_][]const u8{ "8", "32", "64" };

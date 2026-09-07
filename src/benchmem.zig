@@ -7,12 +7,14 @@ pub fn main(init: std.process.Init) !void {
     const cmd_args = try init.minimal.args.toSlice(init.arena.allocator());
     if (cmd_args.len > 1)
         method.shared.MEM_BLOCK_SIZE = @max(1, (std.fmt.parseInt(usize, cmd_args[1], 10) catch 1)) << 20;
-    method.shared.CPU_COUNT = std.Thread.getCpuCount() catch 1;
+
+    const cpu_count = std.Thread.getCpuCount() catch 1;
+    method.shared.CPU_COUNT = cpu_count;
 
     qstdio.initGlobal();
     defer qstdio.deinitGlobal();
 
-    var qb = QuickBench.init(2500, 13);
+    var qb = QuickBench.init(cpu_count, 2500, 13);
     defer qb.deinit();
 
     const headers_read = [_][]const u8{
