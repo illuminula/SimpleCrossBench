@@ -1,19 +1,13 @@
-using i32   = int;
-using i64   = long long;
-using f32   = float;
-using f64   = double;
-using u8    = unsigned char;
-using u64   = unsigned long long;
-using usize = u64;
+#include "../shared/z_style.hpp"
 
-constexpr auto LOAD_FRACTION = 4;
+constexpr auto LOAD_AMOUNT = (u64)5e+6;
 
 __attribute__((optnone)) extern "C" auto c_benchBranch() -> f64
 {
     constexpr auto ARR_SIZE = 5;
 
     i64 v[ARR_SIZE]{};
-    for (i32 i = 0; i < (i32)(LOAD_FRACTION * 1e+6); i++) {
+    for (u64 i = 0; i < LOAD_AMOUNT; i++) {
         if (i & 1) {
             v[0] += 1;
             if (i & 0b10) {
@@ -54,5 +48,5 @@ __attribute__((optnone)) extern "C" auto c_benchBranch() -> f64
     for (i32 i = 0; i < ARR_SIZE; i++)
         anti_o2[i] = v[i];
 
-    return LOAD_FRACTION;
+    return LOAD_AMOUNT / 1e+6;
 }
