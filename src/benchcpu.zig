@@ -9,7 +9,7 @@ pub fn main() !void {
     qstdio.initGlobal();
     defer qstdio.deinitGlobal();
 
-    var qb = QuickBench.init(cpu_count, 2500, 14);
+    var qb = QuickBench.init(cpu_count, 2500, 13);
     defer qb.deinit();
 
     const headers_int = [_][]const u8{
