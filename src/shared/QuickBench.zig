@@ -94,7 +94,8 @@ pub fn bench(self: *QuickBench, comptime header: []const []const u8, funcs: []co
     defer cpu_indexes_arr.deinit(allocator);
 
     try cpu_indexes_arr.append(allocator, &.{0});
-    try cpu_indexes_arr.append(allocator, &.{self.cpu_count / 2});
+    if (self.cpu_count > 2)
+        try cpu_indexes_arr.append(allocator, &.{self.cpu_count / 2});
     try cpu_indexes_arr.append(allocator, &.{self.cpu_count - 1});
     var cpu_indexes_allcpu = try allocator.alloc(usize, self.cpu_count);
     defer allocator.free(cpu_indexes_allcpu);
