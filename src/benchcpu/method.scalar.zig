@@ -1,7 +1,7 @@
 const std = @import("std");
 const builtin = @import("builtin");
 
-const LOAD_AMOUNT = @as(u64, 5e+6);
+const LOAD_AMOUNT = @as(u64, 2e+6);
 
 fn scalarT(comptime T: type, comptime element_count: usize) f64 {
     @setRuntimeSafety(false);
@@ -48,27 +48,27 @@ fn scalarT(comptime T: type, comptime element_count: usize) f64 {
 }
 
 pub fn INT64(_: usize) f64 {
-    return scalarT(i64, 8);
+    return scalarT(i64, 16);
 }
 
 pub fn INT32(_: usize) f64 {
-    return scalarT(i32, 16);
+    return scalarT(i32, 32);
 }
 
 pub fn INT16(_: usize) f64 {
-    return scalarT(i16, 32);
+    return scalarT(i16, 64);
 }
 
 pub fn FP64(_: usize) f64 {
-    return scalarT(f64, 8);
+    return scalarT(f64, 16);
 }
 
 pub fn FP32(_: usize) f64 {
-    return scalarT(f32, 16);
+    return scalarT(f32, 32);
 }
 
 pub fn FP16(_: usize) f64 {
-    return scalarT(f16, 32);
+    return scalarT(f16, 64);
 }
 
 test "syntax" {

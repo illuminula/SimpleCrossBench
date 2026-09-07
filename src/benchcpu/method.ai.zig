@@ -1,12 +1,11 @@
 const std = @import("std");
 
-const LOAD_AMOUNT = @as(usize, 10e+6);
+const LOAD_AMOUNT = @as(usize, 8e+6);
 
-fn vectorT(comptime T: type, comptime vector_amount: usize, comptime garbage: T) f64 {
+fn vectorT(comptime T: type, comptime vector_amount: usize) f64 {
     @setRuntimeSafety(false);
-
-    var a1: @Vector(vector_amount, T) = @splat(garbage);
-    var a2: @Vector(vector_amount, T) = @splat(garbage);
+    var a1: @Vector(vector_amount, T) = @splat(0x55);
+    var a2: @Vector(vector_amount, T) = @splat(0x55);
     asm volatile (""
         :
         : [_] "r" (&a1),
@@ -22,11 +21,11 @@ fn vectorT(comptime T: type, comptime vector_amount: usize, comptime garbage: T)
 }
 
 pub fn INT8(_: usize) f64 {
-    return vectorT(i8, 128, 0x55);
+    return vectorT(i8, 128);
 }
 
 pub fn FP16(_: usize) f64 {
-    return vectorT(f16, 64, 0x55);
+    return vectorT(f16, 64);
 }
 
 test "syntax" {

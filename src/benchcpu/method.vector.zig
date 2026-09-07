@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const LOAD_AMOUNT = @as(u64, 5e+6);
+const LOAD_AMOUNT = @as(u64, 4e+6);
 
 fn vectorT(comptime T: type, comptime element_count: usize) f64 {
     @setRuntimeSafety(false);
@@ -27,27 +27,27 @@ fn vectorT(comptime T: type, comptime element_count: usize) f64 {
 }
 
 pub fn INT64(_: usize) f64 {
-    return vectorT(i64, 8);
+    return vectorT(i64, 16);
 }
 
 pub fn INT32(_: usize) f64 {
-    return vectorT(i32, 16);
+    return vectorT(i32, 32);
 }
 
 pub fn INT16(_: usize) f64 {
-    return vectorT(i16, 32);
+    return vectorT(i16, 64);
 }
 
 pub fn FP64(_: usize) f64 {
-    return vectorT(f64, 8);
+    return vectorT(f64, 16);
 }
 
 pub fn FP32(_: usize) f64 {
-    return vectorT(f32, 16);
+    return vectorT(f32, 32);
 }
 
 pub fn FP16(_: usize) f64 {
-    return vectorT(f16, 32);
+    return vectorT(f16, 64);
 }
 
 test "syntax" {
