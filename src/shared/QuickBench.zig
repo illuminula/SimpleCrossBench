@@ -121,7 +121,7 @@ pub fn bench(self: *QuickBench, comptime header: []const []const u8, funcs: []co
                 const score = try self.batchRun(func, cpu_indexes);
                 for (0..self.bench_item_width) |_|
                     try qstdio.write("\x08", .{});
-                try qstdio.write("{d:<[1].2} {[2]s}", .{ score, self.bench_item_width - 1 - unit.len, unit });
+                try qstdio.write("{d:<[1].1} {[2]s}", .{ score, self.bench_item_width - 1 - unit.len, unit });
             }
 
             try qstdio.write("|\x08", .{});
