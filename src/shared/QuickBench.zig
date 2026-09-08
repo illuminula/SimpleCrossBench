@@ -140,8 +140,10 @@ pub fn bench(self: *QuickBench, comptime header: []const []const u8, funcs: []co
 }
 
 fn _test_callback(_: usize) f64 {
-    var t = std.Io.Threaded.init_single_threaded;
-    const io = t.io();
+    var io_thread = std.Io.Threaded.init_single_threaded;
+    defer io_thread.deinit();
+    const io = io_thread.io();
+
     io.sleep(.fromMilliseconds(100), .awake) catch {};
     return 1.0;
 }
