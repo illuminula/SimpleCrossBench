@@ -39,10 +39,10 @@ pub fn main() !void {
     try qstdio.writeLine("", .{});
 
     const headers_cache = [_][]const u8{
-        "CacheL1 16K",
+        "CacheL1 16K ",
         "CacheL2 192K",
-        "CacheL3 4M",
-        "CacheL4 16M",
+        "CacheL3 4M  ",
+        "CacheL4 16M ",
     };
     const funcs_cache = [_]QuickBench.UserCallback{
         method.cache.INT16K,
