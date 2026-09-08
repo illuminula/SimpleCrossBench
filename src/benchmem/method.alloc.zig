@@ -3,12 +3,11 @@ const allocator = @import("allocator.zig");
 const shared = @import("method.shared.zig");
 
 fn writeT(comptime vector_count: usize, mem_block: []u8) f64 {
-    @setRuntimeSafety(false);
-
     const mem_block_size = mem_block.len / vector_count;
     const ptr = @as([*]@Vector(vector_count, u8), @ptrCast(@alignCast(mem_block.ptr)));
+
     for (0..mem_block_size) |i| {
-        ptr[i] = @splat(0xcc);
+        ptr[i] = @splat(0x55);
         asm volatile ("" ::: .{ .memory = true });
     }
 

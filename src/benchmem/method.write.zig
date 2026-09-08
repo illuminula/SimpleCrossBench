@@ -7,7 +7,7 @@ fn writeT(comptime vector_count: usize, mem_block: []u8) f64 {
     const ptr = @as([*]@Vector(vector_count, u8), @ptrCast(@alignCast(mem_block.ptr)));
 
     for (0..mem_block_size) |i| {
-        ptr[i] = @splat(0xcc);
+        ptr[i] = @splat(0x55);
         asm volatile ("" ::: .{ .memory = true });
     }
 
