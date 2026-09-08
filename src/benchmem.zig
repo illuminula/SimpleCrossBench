@@ -25,21 +25,21 @@ pub fn main(init: std.process.Init) !void {
         method.read.INT8,   method.read.INT32,  method.read.INT64,
         method.read.INT256, method.read.INT512, method.read.INT1024,
     };
-    try qstdio.write("init memory\r", .{});
+    try qstdio.write("init memory...\r", .{});
     try method.shared.init();
     try qb.bench(&headers_read, &funcs_read, "GBps");
     try qstdio.writeLine("", .{});
     method.shared.deinit();
 
     const headers_write = [_][]const u8{
-        "Write 8bit  ", "Write 32bit ", "Write 64bit ",
+        "Write 8bit  ", "Write 32bit ", "Write 64bit  ",
         "Write 256bit", "Write 512bit", "Write 1024bit",
     };
     const funcs_write = [_]QuickBench.UserCallback{
         method.write.INT8,   method.write.INT32,  method.write.INT64,
         method.write.INT256, method.write.INT512, method.write.INT1024,
     };
-    try qstdio.write("init memory\r", .{});
+    try qstdio.write("init memory...\r", .{});
     try method.shared.init();
     try qb.bench(&headers_write, &funcs_write, "GBps");
     try qstdio.writeLine("", .{});
@@ -53,7 +53,7 @@ pub fn main(init: std.process.Init) !void {
         method.copy.INT8,   method.copy.INT32,  method.copy.INT64,
         method.copy.INT256, method.copy.INT512, method.copy.INT1024,
     };
-    try qstdio.write("init memory\r", .{});
+    try qstdio.write("init memory...\r", .{});
     try method.shared.init();
     try qb.bench(&headers_copy, &funcs_copy, "GBps");
     try qstdio.writeLine("", .{});
