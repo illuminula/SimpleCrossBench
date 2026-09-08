@@ -38,13 +38,19 @@ pub fn main() !void {
     try qb.bench(&headers_fp, &funcs_fp, "MOps");
     try qstdio.writeLine("", .{});
 
-    const headers_ai = [_][]const u8{
-        "INT8.AI", "FP16.AI",
+    const headers_cache = [_][]const u8{
+        "CacheL1 16K",
+        "CacheL2 192K",
+        "CacheL3 4M",
+        "CacheL4 16M",
     };
-    const funcs_ai = [_]QuickBench.UserCallback{
-        method.ai.INT8, method.ai.FP16,
+    const funcs_cache = [_]QuickBench.UserCallback{
+        method.cache.INT16K,
+        method.cache.INT192K,
+        method.cache.INT4M,
+        method.cache.INT16M,
     };
-    try qb.bench(&headers_ai, &funcs_ai, "MOps");
+    try qb.bench(&headers_cache, &funcs_cache, "GBps");
     try qstdio.writeLine("", .{});
 
     qstdio.autoPause();
