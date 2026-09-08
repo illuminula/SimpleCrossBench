@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const LOAD_AMOUNT = @as(usize, 1e+8);
+const LOAD_AMOUNT = @as(usize, 1e+7);
 
 fn vectorT(comptime T: type, comptime vector_amount: usize) f64 {
     @setRuntimeSafety(false);
