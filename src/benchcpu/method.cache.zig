@@ -37,7 +37,7 @@ pub fn INT4M(_: usize) f64 {
 
 pub fn INT16M(_: usize) f64 {
     if (builtin.os.tag == .linux)
-        _ = std.os.linux.setrlimit(.STACK, &.{ .cur = 16 << 20, .max = 16 << 20 });
+        _ = std.os.linux.setrlimit(.STACK, &.{ .cur = 17 << 20, .max = 17 << 20 });
     return cacheT(16 << 20);
 }
 
