@@ -1,6 +1,6 @@
 const std = @import("std");
 
-const LOAD_AMOUNT = @as(usize, 8e+6);
+const LOAD_AMOUNT = @as(usize, 1e+8);
 
 fn vectorT(comptime T: type, comptime vector_amount: usize) f64 {
     @setRuntimeSafety(false);
@@ -17,15 +17,15 @@ fn vectorT(comptime T: type, comptime vector_amount: usize) f64 {
         asm volatile ("" ::: .{ .memory = true });
     }
 
-    return @as(f64, vector_amount * LOAD_AMOUNT) / 1e+6;
+    return @as(f64, vector_amount * LOAD_AMOUNT) / 1e+9;
 }
 
 pub fn INT8(_: usize) f64 {
-    return vectorT(i8, 128);
+    return vectorT(i8, 512);
 }
 
 pub fn FP16(_: usize) f64 {
-    return vectorT(f16, 64);
+    return vectorT(f16, 256);
 }
 
 test "syntax" {
