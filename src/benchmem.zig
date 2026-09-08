@@ -18,7 +18,7 @@ pub fn main(init: std.process.Init) !void {
     defer qb.deinit();
 
     const headers_read = [_][]const u8{
-        "Read 8bit",   "Read 32bit",  "Read 64bit",
+        "Read 8bit  ", "Read 32bit ", "Read 64bit  ",
         "Read 256bit", "Read 512bit", "Read 1024bit",
     };
     const funcs_read = [_]QuickBench.UserCallback{
@@ -31,7 +31,7 @@ pub fn main(init: std.process.Init) !void {
     method.shared.deinit();
 
     const headers_write = [_][]const u8{
-        "Write 8bit",   "Write 32bit",  "Write 64bit",
+        "Write 8bit  ", "Write 32bit ", "Write 64bit ",
         "Write 256bit", "Write 512bit", "Write 1024bit",
     };
     const funcs_write = [_]QuickBench.UserCallback{
@@ -44,7 +44,7 @@ pub fn main(init: std.process.Init) !void {
     method.shared.deinit();
 
     const headers_copy = [_][]const u8{
-        "Copy 8bit",   "Copy 32bit",  "Copy 64bit",
+        "Copy 8bit  ", "Copy 32bit ", "Copy 64bit  ",
         "Copy 256bit", "Copy 512bit", "Copy 1024bit",
     };
     const funcs_copy = [_]QuickBench.UserCallback{
@@ -57,7 +57,7 @@ pub fn main(init: std.process.Init) !void {
     method.shared.deinit();
 
     const headers_alloc = [_][]const u8{
-        "Alloc 8bit",   "Alloc 32bit",  "Alloc 64bit",
+        "Alloc 8bit  ", "Alloc 32bit ", "Alloc 64bit  ",
         "Alloc 256bit", "Alloc 512bit", "Alloc 1024bit",
     };
     const funcs_alloc = [_]QuickBench.UserCallback{
