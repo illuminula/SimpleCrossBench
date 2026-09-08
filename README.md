@@ -4,11 +4,10 @@
 - MacOS   `aarch64`
 
 ## 已有的CPU测试项
-- INT `64` `32` `16`
-- FP  `64` `32` `16`
-- INT8 AI
-- FP16 AI
+- INT   `64` `32` `16`
+- FP    `64` `32` `16`
 - Cache `L1` `L2` `L3` `L4`
+- AI    `INT8` `FP16`
 
 ## 已有的内存测试项
 - Read  `8bit` `32bit` `64bit` `256bit` `512bit` `1024bit`
