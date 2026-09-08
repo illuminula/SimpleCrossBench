@@ -1,3 +1,8 @@
+## 已编译的平台
+- Windows `aarch64` `x86_64` `x86_64_v3` `znver4`
+- Linux   `aarch64` `x86_64` `x86_64_v3` `znver4`
+- MacOS   `aarch64`
+
 ## 已有的CPU测试项
 - INT `64` `32` `16`
 - FP  `64` `32` `16`
