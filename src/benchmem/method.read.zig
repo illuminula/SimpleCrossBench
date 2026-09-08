@@ -20,27 +20,27 @@ fn readT(comptime vector_count: usize, mem_block: []u8) f64 {
 }
 
 pub fn INT8(cpu_index: usize) f64 {
-    return readT(1, shared.MEM_BLOCK.items[cpu_index]);
+    return readT(1, shared.MEM_BLOCKS[cpu_index]);
 }
 
 pub fn INT32(cpu_index: usize) f64 {
-    return readT(4, shared.MEM_BLOCK.items[cpu_index]);
+    return readT(4, shared.MEM_BLOCKS[cpu_index]);
 }
 
 pub fn INT64(cpu_index: usize) f64 {
-    return readT(8, shared.MEM_BLOCK.items[cpu_index]);
+    return readT(8, shared.MEM_BLOCKS[cpu_index]);
 }
 
 pub fn INT256(cpu_index: usize) f64 {
-    return readT(32, shared.MEM_BLOCK.items[cpu_index]);
+    return readT(32, shared.MEM_BLOCKS[cpu_index]);
 }
 
 pub fn INT512(cpu_index: usize) f64 {
-    return readT(64, shared.MEM_BLOCK.items[cpu_index]);
+    return readT(64, shared.MEM_BLOCKS[cpu_index]);
 }
 
 pub fn INT1024(cpu_index: usize) f64 {
-    return readT(128, shared.MEM_BLOCK.items[cpu_index]);
+    return readT(128, shared.MEM_BLOCKS[cpu_index]);
 }
 
 test "syntax" {
