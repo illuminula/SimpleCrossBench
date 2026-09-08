@@ -51,7 +51,7 @@ pub fn printHeader(self: *QuickBench, items: []const []const u8) !void {
     try qstdio.writeLine("", .{});
 }
 
-fn placedCallback(func: UserCallback, cpu_index: usize) f64 {
+fn placedCallback(func: UserCallback, cpu_index: usize, result: *f64) void {
     const arch_bit_size = @bitSizeOf(usize);
     const cpu_group = cpu_index / arch_bit_size;
     const cpu_bit = @as(usize, 1) << @truncate(cpu_index % arch_bit_size);
@@ -68,18 +68,23 @@ fn placedCallback(func: UserCallback, cpu_index: usize) f64 {
         std.os.linux.sched_setaffinity(0, &cpuset) catch {};
     }
 
-    return func(cpu_index);
+    result.* = func(cpu_index);
 }
 
 fn batchRun(self: *QuickBench, func: UserCallback, cpu_indexes: []const usize) !f64 {
     const io = self.threaded.io();
-    var futures = try allocator.alloc(std.Io.Future(f64), cpu_indexes.len);
-    defer allocator.free(futures);
+    var group = std.Io.Group.init;
+    errdefer group.cancel(io);
+    var results = try allocator.alloc(f64, cpu_indexes.len);
+    defer allocator.free(results);
 
     var score = @as(f64, 0.0);
     const ns1 = self.currentNs();
-    for (0..cpu_indexes.len) |i| futures[i] = io.async(placedCallback, .{ func, cpu_indexes[i] });
-    for (0..cpu_indexes.len) |i| score += futures[i].await(io);
+    for (0..cpu_indexes.len) |i|
+        group.async(io, placedCallback, .{ func, cpu_indexes[i], &results[i] });
+    try group.await(io);
+    for (0..cpu_indexes.len) |i|
+        score += results[i];
     const ns2 = self.currentNs();
 
     return toPerSecScore(ns1, score, ns2);
