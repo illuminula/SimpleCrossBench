@@ -35,10 +35,10 @@ pub fn INT4M(_: usize) f64 {
     return cacheT(4 << 20);
 }
 
-pub fn INT16M(_: usize) f64 {
+pub fn INT12M(_: usize) f64 {
     if (builtin.os.tag == .linux)
-        _ = std.os.linux.setrlimit(.STACK, &.{ .cur = 17 << 20, .max = 17 << 20 });
-    return cacheT(16 << 20);
+        _ = std.os.linux.setrlimit(.STACK, &.{ .cur = 16 << 20, .max = 16 << 20 });
+    return cacheT(12 << 20);
 }
 
 test "syntax" {
@@ -46,6 +46,6 @@ test "syntax" {
     std.debug.print("INT16K  {}\n", .{INT16K(0)});
     std.debug.print("INT192K {}\n", .{INT192K(0)});
     std.debug.print("INT4M   {}\n", .{INT4M(0)});
-    std.debug.print("INT16M  {}\n", .{INT16M(0)});
+    std.debug.print("INT16M  {}\n", .{INT12M(0)});
     std.debug.print("\n", .{});
 }

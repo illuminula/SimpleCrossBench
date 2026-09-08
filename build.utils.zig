@@ -31,7 +31,7 @@ fn adjustCompileOptions(compile: *std.Build.Step.Compile) void {
     compile.link_data_sections = true;
     compile.link_gc_sections = true;
     compile.is_linking_libc = true;
-    compile.stack_size = 17 << 20;
+    compile.stack_size = 16 << 20;
 }
 
 pub fn addBin(build: *std.Build, project_name: []const u8, root_src: []const u8, targets: []const std.Target.Query, optimize: ?std.builtin.OptimizeMode) !void {

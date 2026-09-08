@@ -42,13 +42,13 @@ pub fn main() !void {
         "CacheL1 16K ",
         "CacheL2 192K",
         "CacheL3 4M  ",
-        "CacheL4 16M ",
+        "CacheL4 12M ",
     };
     const funcs_cache = [_]QuickBench.UserCallback{
         method.cache.INT16K,
         method.cache.INT192K,
         method.cache.INT4M,
-        method.cache.INT16M,
+        method.cache.INT12M,
     };
     try qb.bench(&headers_cache, &funcs_cache, "GBps");
     try qstdio.writeLine("", .{});
