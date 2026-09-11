@@ -4,8 +4,6 @@ const builtin = @import("builtin");
 const qstdio = @import("./QuickStdio.zig");
 const allocator = std.heap.smp_allocator;
 
-pub const UserCallback = *const fn (usize) f64;
-
 cpu_count: usize,
 bench_time_ms: u32,
 bench_item_width: u32,
@@ -39,7 +37,7 @@ fn toPerSecScore(ns1: i96, origin_score: f64, ns2: i96) f64 {
 pub fn printSplit(self: *QuickBench, count: u32) !void {
     try qstdio.write("+", .{});
     for (0..count) |_| {
-        try qstdio.write("{s:-^[1]}+", .{ "", self.bench_item_width });
+        try qstdio.write("{s:-<[1]}+", .{ "", self.bench_item_width });
     }
     try qstdio.writeLine("", .{});
 }
@@ -47,11 +45,13 @@ pub fn printSplit(self: *QuickBench, count: u32) !void {
 pub fn printHeader(self: *QuickBench, items: []const []const u8) !void {
     try qstdio.write("|", .{});
     for (items) |item|
-        try qstdio.write("{s: ^[1]}|", .{ item, self.bench_item_width });
+        try qstdio.write("{s:<[1]}|", .{ item, self.bench_item_width });
     try qstdio.writeLine("", .{});
 }
 
-fn placedCallback(func: UserCallback, cpu_index: usize, result: *f64) void {
+pub const BenchFunc = *const fn (usize) f64;
+
+fn placedCallback(func: BenchFunc, cpu_index: usize, result: *f64) void {
     const arch_bit_size = @bitSizeOf(usize);
     const cpu_group = cpu_index / arch_bit_size;
     const cpu_bit = @as(usize, 1) << @truncate(cpu_index % arch_bit_size);
@@ -71,7 +71,7 @@ fn placedCallback(func: UserCallback, cpu_index: usize, result: *f64) void {
     result.* = func(cpu_index);
 }
 
-fn batchRun(self: *QuickBench, func: UserCallback, cpu_indexes: []const usize) !f64 {
+fn batchRun(self: *QuickBench, func: BenchFunc, cpu_indexes: []const usize) !f64 {
     const io = self.threaded.io();
     var group = std.Io.Group.init;
     errdefer group.cancel(io);
@@ -90,7 +90,7 @@ fn batchRun(self: *QuickBench, func: UserCallback, cpu_indexes: []const usize) !
     return toPerSecScore(ns1, score, ns2);
 }
 
-pub fn bench(self: *QuickBench, comptime header: []const []const u8, funcs: []const UserCallback, unit: []const u8) !void {
+pub fn bench(self: *QuickBench, comptime header: []const []const u8, funcs: []const BenchFunc, unit: []const u8) !void {
     try self.printSplit(1 + header.len);
     try self.printHeader(&[_][]const u8{"CPU"} ++ header);
     try self.printSplit(1 + header.len);
@@ -158,6 +158,6 @@ test "syntax" {
     defer qb.deinit();
 
     const headers = [_][]const u8{ "8", "32", "64" };
-    const funcs = [_]UserCallback{ _test_callback, _test_callback, _test_callback };
+    const funcs = [_]BenchFunc{ _test_callback, _test_callback, _test_callback };
     try qb.bench(&headers, &funcs, "MOps");
 }

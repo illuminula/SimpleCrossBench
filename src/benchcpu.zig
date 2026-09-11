@@ -9,46 +9,48 @@ pub fn main() !void {
     qstdio.initGlobal();
     defer qstdio.deinitGlobal();
 
-    var qb = QuickBench.init(cpu_count, 2500, 13);
+    var qb = QuickBench.init(cpu_count, 2500, 10 + 1 + 4);
     defer qb.deinit();
 
-    const headers_int = [_][]const u8{
-        "INT64.s", "INT64.v",
-        "INT32.s", "INT32.v",
-        "INT16.s", "INT16.v",
+    const headers_int_scalar = [_][]const u8{
+        "INT64.s", "INT32.s", "INT16.s", "INT8.s",
     };
-    const funcs_int = [_]QuickBench.UserCallback{
-        method.scalar.INT64, method.vector.INT64,
-        method.scalar.INT32, method.vector.INT32,
-        method.scalar.INT16, method.vector.INT16,
+    const headers_int_vector = [_][]const u8{
+        "INT64.v", "INT32.v", "INT16.v", "INT8.v",
     };
-    try qb.bench(&headers_int, &funcs_int, "MOps");
+    const funcs_int_scalar = [_]QuickBench.BenchFunc{
+        method.scalar.INT64, method.scalar.INT32, method.scalar.INT16, method.scalar.INT8,
+    };
+    const funcs_int_vector = [_]QuickBench.BenchFunc{
+        method.vector.INT64, method.vector.INT32, method.vector.INT16, method.vector.INT8,
+    };
+    try qb.bench(&headers_int_scalar, &funcs_int_scalar, "MOps");
+    try qstdio.writeLine("", .{});
+    try qb.bench(&headers_int_vector, &funcs_int_vector, "MOps");
     try qstdio.writeLine("", .{});
 
-    const headers_fp = [_][]const u8{
-        "FP64.s", "FP64.v",
-        "FP32.s", "FP32.v",
-        "FP16.s", "FP16.v",
+    const headers_fp_scalar = [_][]const u8{
+        "FP64.s", "FP32.s", "FP16.s",
     };
-    const funcs_fp = [_]QuickBench.UserCallback{
-        method.scalar.FP64, method.vector.FP64,
-        method.scalar.FP32, method.vector.FP32,
-        method.scalar.FP16, method.vector.FP16,
+    const headers_fp_vector = [_][]const u8{
+        "FP64.v", "FP32.v", "FP16.v",
     };
-    try qb.bench(&headers_fp, &funcs_fp, "MOps");
+    const funcs_fp_scalar = [_]QuickBench.BenchFunc{
+        method.scalar.FP64, method.scalar.FP32, method.scalar.FP16,
+    };
+    const funcs_fp_vector = [_]QuickBench.BenchFunc{
+        method.vector.FP64, method.vector.FP32, method.vector.FP16,
+    };
+    try qb.bench(&headers_fp_scalar, &funcs_fp_scalar, "MOps");
+    try qstdio.writeLine("", .{});
+    try qb.bench(&headers_fp_vector, &funcs_fp_vector, "MOps");
     try qstdio.writeLine("", .{});
 
     const headers_cache = [_][]const u8{
-        "CacheL1 16K ",
-        "CacheL2 192K",
-        "CacheL3 4M  ",
-        "CacheL4 12M ",
+        "L1C 16K ", "L2C 192K", "L3C 3M  ", "L4C 12M ",
     };
-    const funcs_cache = [_]QuickBench.UserCallback{
-        method.cache.INT16K,
-        method.cache.INT192K,
-        method.cache.INT4M,
-        method.cache.INT12M,
+    const funcs_cache = [_]QuickBench.BenchFunc{
+        method.cache.INT16K, method.cache.INT192K, method.cache.INT3M, method.cache.INT12M,
     };
     try qb.bench(&headers_cache, &funcs_cache, "GBps");
     try qstdio.writeLine("", .{});

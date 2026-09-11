@@ -9,14 +9,14 @@ pub fn main() !void {
     qstdio.initGlobal();
     defer qstdio.deinitGlobal();
 
-    var qb = QuickBench.init(cpu_count, 2500, 13);
+    var qb = QuickBench.init(cpu_count, 2500, 10 + 1 + 4);
     defer qb.deinit();
 
     const headers_ai = [_][]const u8{
-        "INT8.AI", "FP16.AI",
+        "INT8.vmul", "FP16.vmul",
     };
-    const funcs_ai = [_]QuickBench.UserCallback{
-        method.ai.INT8, method.ai.FP16,
+    const funcs_ai = [_]QuickBench.BenchFunc{
+        method.vmul.INT8, method.vmul.FP16,
     };
     try qb.bench(&headers_ai, &funcs_ai, "GOps");
     try qstdio.writeLine("", .{});

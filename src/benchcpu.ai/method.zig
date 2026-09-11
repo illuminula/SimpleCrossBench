@@ -1,1 +1,1 @@
-pub const ai = @import("./method.ai.zig");
+pub const vmul = @import("./method.vmul.zig");
