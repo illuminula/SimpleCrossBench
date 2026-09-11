@@ -13,7 +13,7 @@ $release_body = $release_body `
     -replace '(?<=: ).*(修改|调整|更换)', '🔧$&' `
     -replace '(?<=: ).*修复', '🪛$&' `
     -replace '(?<=: ).*(优化|改进)', '🚀$&' `
-    -replace '(?<=: ).*(重构|重写)', '⚙️$&' `
+    -replace '(?<=: ).*(重构|重写|大改)', '⚙️$&' `
 
 Write-Output previous_tag=$previous_tag
 Write-Output release_body=$release_body
