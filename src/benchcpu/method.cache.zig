@@ -31,8 +31,8 @@ pub fn INT192K(_: usize) f64 {
     return cacheT(192 << 10);
 }
 
-pub fn INT4M(_: usize) f64 {
-    return cacheT(4 << 20);
+pub fn INT3M(_: usize) f64 {
+    return cacheT(3 << 20);
 }
 
 pub fn INT12M(_: usize) f64 {
@@ -45,7 +45,7 @@ test "syntax" {
     std.debug.print("\n", .{});
     std.debug.print("INT16K  {}\n", .{INT16K(0)});
     std.debug.print("INT192K {}\n", .{INT192K(0)});
-    std.debug.print("INT4M   {}\n", .{INT4M(0)});
+    std.debug.print("INT3M   {}\n", .{INT3M(0)});
     std.debug.print("INT16M  {}\n", .{INT12M(0)});
     std.debug.print("\n", .{});
 }
