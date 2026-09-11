@@ -59,6 +59,10 @@ pub fn INT16(_: usize) f64 {
     return scalarT(i16, 64);
 }
 
+pub fn INT8(_: usize) f64 {
+    return scalarT(i8, 64);
+}
+
 pub fn FP64(_: usize) f64 {
     return scalarT(f64, 16);
 }

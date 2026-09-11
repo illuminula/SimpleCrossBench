@@ -38,6 +38,10 @@ pub fn INT16(_: usize) f64 {
     return vectorT(i16, 64);
 }
 
+pub fn INT8(_: usize) f64 {
+    return vectorT(i8, 64);
+}
+
 pub fn FP64(_: usize) f64 {
     return vectorT(f64, 16);
 }
